@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"net"
 	"os"
@@ -15,7 +14,7 @@ func main() {
 	}
 
 	// Resolve the string address to a TCP address
-	tcpAddr, err := net.ResolveTCPAddr("tcp4", os.Args[1])
+	tcpAddr, err := net.ResolveTCPAddr("tcp", os.Args[1])
 
 	if err != nil {
 		fmt.Println(err)
@@ -31,19 +30,20 @@ func main() {
 	}
 
 	// Send a message to the server
-	_, err = conn.Write([]byte("Hello TCP Server\n"))
+	_, err = conn.Write([]byte("Hello TCP Server"))
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
 	// Read from the connection untill a new line is send
-	data, err := bufio.NewReader(conn).ReadString('\n')
+	var buf [512]byte
+	_, err = conn.Read(buf[0:])
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	// Print the data read from the connection to the terminal
-	fmt.Print("> ", string(data))
+	fmt.Print("> ", string(buf[0:]))
 }

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"net"
 	"os"
@@ -46,16 +45,17 @@ func handleConnection(conn net.Conn) {
 
 	for {
 		// Read from the connection untill a new line is send
-		data, err := bufio.NewReader(conn).ReadString('\n')
+		var buf [512]byte
+		_, err := (conn).Read(buf[0:])
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 
 		// Print the data read from the connection to the terminal
-		fmt.Print("> ", string(data))
+		fmt.Print("> ", string(buf[0:]))
 
 		// Write back the same message to the client
-		conn.Write([]byte("Hello TCP Client\n"))
+		conn.Write([]byte("Hello TCP Client nhe\n"))
 	}
 }
